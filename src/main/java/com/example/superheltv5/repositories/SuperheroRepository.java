@@ -27,13 +27,14 @@ public class SuperheroRepository {
   public List<Superhero> getAll() {
     List<Superhero> superheroList = new ArrayList<>();
 
-    try (Connection con = DriverManager.getConnection(url, user, password)) {
-      System.out.println(con);
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
+      System.out.println("Connection object without singleton: " + conn);
       String SQL = "select hero_id, hero_name, real_name, creation_year from superhero order by hero_name;";
-      Statement stmt = con.createStatement();
+      Statement stmt = conn.createStatement();
       ResultSet rs = stmt.executeQuery(SQL);
 
       while (rs.next()) {
+        // table columns retrieved by name
         int heroId = rs.getInt("hero_id");
         String heroName = rs.getString("hero_name");
         String realName = rs.getString("real_name");
@@ -50,12 +51,14 @@ public class SuperheroRepository {
     List<Superhero> superheroList = new ArrayList<>();
 
     try {
-      Connection con = ConnectionManager.getConnection(url, user, password);
-      System.out.println(con);
-      PreparedStatement psts = con.prepareStatement("SELECT * from superhero");
+      //Connection conn = ConnectionManager.getConnection(url, user, password);
+      Connection conn = ConnectionManager.getConnection();
+      System.out.println("Connection object  singleton: " + conn);
+      PreparedStatement psts = conn.prepareStatement("SELECT * from superhero");
       ResultSet resultSet = psts.executeQuery();
 
       while (resultSet.next()){
+        // table columns retrieved by position
         int id = resultSet.getInt(1);
         String heroName = resultSet.getString(2);
         String realName = resultSet.getString(3);
@@ -67,18 +70,18 @@ public class SuperheroRepository {
     }
     catch (SQLException e)
     {
-      System.out.println("Couldn't connect to db");
+      System.out.println("Something wrong with query");
       e.printStackTrace();
-      throw new SuperheroException("Couldn't connect to the database");
+      throw new SuperheroException("Something wrong with query");
     }
 
     return superheroList;
   }
 
   public Superhero getSuperheroByName(String heroName) {
-    try (Connection con = DriverManager.getConnection(url, user, password)) {
+    try (Connection conn = DriverManager.getConnection(url, user, password)) {
       String SQL = "select hero_id, hero_name, real_name, creation_year from superhero where hero_name = ?";
-      PreparedStatement pstmt = con.prepareStatement(SQL);
+      PreparedStatement pstmt = conn.prepareStatement(SQL);
       pstmt.setString(1, heroName);
       ResultSet rs = pstmt.executeQuery();
       if (rs.next()) {
