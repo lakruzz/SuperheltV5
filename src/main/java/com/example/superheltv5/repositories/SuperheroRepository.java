@@ -51,9 +51,9 @@ public class SuperheroRepository {
     List<Superhero> superheroList = new ArrayList<>();
 
     try {
-      //Connection conn = ConnectionManager.getConnection(url, user, password);
+      // All information and work related to database connection is in ConnectionManager
       Connection conn = ConnectionManager.getConnection();
-      System.out.println("Connection object  singleton: " + conn);
+      System.out.println("Connection object with singleton: " + conn);
       PreparedStatement psts = conn.prepareStatement("SELECT * from superhero");
       ResultSet resultSet = psts.executeQuery();
 
@@ -70,11 +70,8 @@ public class SuperheroRepository {
     }
     catch (SQLException e)
     {
-      System.out.println("Something wrong with query");
-      e.printStackTrace();
       throw new SuperheroException("Something wrong with query");
     }
-
     return superheroList;
   }
 

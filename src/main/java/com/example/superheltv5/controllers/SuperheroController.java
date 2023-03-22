@@ -38,18 +38,10 @@ public class SuperheroController {
     return "list";
   }
 
+  // A template is used to display error message
   @ExceptionHandler(SuperheroException.class)
   public String handleError(Model model, Exception exception) {
     model.addAttribute("message",exception.getMessage());
     return "errorPage";
-
-  }
-
-  @RequestMapping("/404.html")
-  public String render404(Model model) {
-    System.out.println("HTTP 404");
-    model.addAttribute("message","not found, tine");
-    // Add model attributes
-    return "404";
   }
 }
