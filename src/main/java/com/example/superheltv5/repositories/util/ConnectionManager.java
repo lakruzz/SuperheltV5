@@ -2,7 +2,6 @@ package com.example.superheltv5.repositories.util;
 
 import com.example.superheltv5.services.SuperheroException;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

@@ -1,44 +1,40 @@
 package com.example.superheltv5.controllers;
 
-import com.example.superheltv5.repositories.SuperheroRepository;
+import com.example.superheltv5.models.Superhero;
 import com.example.superheltv5.services.SuperheroException;
 import com.example.superheltv5.services.SuperheroService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("superhero")
 public class SuperheroController {
 
-  //private SuperheroRepository repo;
   private SuperheroService service;
 
   public SuperheroController(SuperheroService service) {
     this.service = service;
   }
 
- /*public SuperheroController(ApplicationContext context, @Value("${superhero.repository}") String impl) {
-    repo = (SuperheroRepository) context.getBean(impl);
-  }*/
-
   @RequestMapping("/all")
-  public String getAll() {
-    System.out.println(service.getAll().size());
+  public String getAll(Model model) {
+    List<Superhero> heroList = service.getAll();
+    model.addAttribute("result", heroList);
     return "list";
   }
 
   @RequestMapping("/all2")
-  public String getAll2() throws SuperheroException {
-    System.out.println(service.getAll2().size());
+  public String getAll2(Model model) throws SuperheroException {
+    List<Superhero> heroList = service.getAll2();
+    model.addAttribute("result", heroList);
     return "list";
   }
 
-  // A template is used to display error message
+  // Thymeleaf template is used to display error message
   @ExceptionHandler(SuperheroException.class)
   public String handleError(Model model, Exception exception) {
     model.addAttribute("message",exception.getMessage());
