@@ -2,30 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add heroes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 </head>
 <body>
-<form action="#" th:action="@{/superhero/save2}" th:object="${form}" method="post">
-    <fieldset>
-        <input type="submit" id="submitButton" th:value="Save">
-        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
-        <table>
-            <thead>
-            <tr>
-                <th scope="col">Hero name</th>
-                <th scope="col">Real name</th>
-                <th scope="col">Creation year</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="hero, itemStat : *{superheroes}">
-                <td><input th:field="*{superheroes[__${itemStat.index}__].heroName}" /></td>
-                <td><input th:field="*{superheroes[__${itemStat.index}__].realName}" /></td>
-                <td><input th:field="*{superheroes[__${itemStat.index}__].creationYear}" /></td>
-            </tr>
-            </tbody>
-        </table>
-    </fieldset>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1> Add Heroes </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="#" class="form-horizontal" th:action="@{/superhero/save2}" th:object="${form}" method="post">
+                <fieldset>
+        <span class="pull-right">
+						    <input type="submit" id="submitButton" class="btn btn-success" th:value="Save">
+						    <input type="reset" id="resetButton" class="btn btn-danger" th:value="Reset"/>
+					</span>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Hero name</th>
+                            <th scope="col">Real name</th>
+                            <th scope="col">Creation year</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="hero, itemStat : *{superheroes}">
+                            <td><input th:field="*{superheroes[__${itemStat.index}__].heroName}"/></td>
+                            <td><input th:field="*{superheroes[__${itemStat.index}__].realName}"/></td>
+                            <td><input th:field="*{superheroes[__${itemStat.index}__].creationYear}"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
