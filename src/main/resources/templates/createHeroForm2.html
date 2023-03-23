@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="#" th:action="@{/superhero/save2}" th:object="${form}" method="post">
+    <fieldset>
+        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Hero name</th>
+                <th scope="col">Real name</th>
+                <th scope="col">Creation year</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="hero, itemStat : *{superheroes}">
+                <td><input th:field="*{superheroes[__${itemStat.index}__].heroName}" /></td>
+                <td><input th:field="*{superheroes[__${itemStat.index}__].realName}" /></td>
+                <td><input th:field="*{superheroes[__${itemStat.index}__].creationYear}" /></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</form>
+</body>
+</html>

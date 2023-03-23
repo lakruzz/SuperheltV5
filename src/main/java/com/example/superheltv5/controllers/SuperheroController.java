@@ -1,12 +1,12 @@
 package com.example.superheltv5.controllers;
 
+import com.example.superheltv5.dto.SuperheroesCreationDto;
 import com.example.superheltv5.models.Superhero;
 import com.example.superheltv5.services.SuperheroException;
 import com.example.superheltv5.services.SuperheroService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,6 +32,45 @@ public class SuperheroController {
     List<Superhero> heroList = service.getAll2();
     model.addAttribute("result", heroList);
     return "list";
+  }
+
+  @GetMapping("/create")
+  public String showForm(Model model) {
+    //create new empty Person object
+    model.addAttribute("hero", new Superhero());
+    return "createHeroForm";
+  }
+
+  @PostMapping("/save")
+  public String heroSave(@ModelAttribute Superhero hero, Model model) throws SuperheroException {
+    //save populated Superhero object in database
+    service.save(hero);
+
+    //find hero again in database and show updated list
+    List<Superhero> heroList = service.getAll2();
+    model.addAttribute("result", heroList);
+    return "list";
+  }
+
+  @GetMapping("/create2")
+  public String showCreateForm(Model model) {
+    SuperheroesCreationDto heroesForm = new SuperheroesCreationDto();
+
+    for (int i = 1; i <= 3; i++) {
+      heroesForm.addHero(new Superhero());
+    }
+
+    model.addAttribute("form", heroesForm);
+    return "createHeroForm2";
+  }
+
+  @PostMapping("/save2")
+  public String saveHeroes(@ModelAttribute SuperheroesCreationDto form, Model model) throws SuperheroException {
+    System.out.println(form.getSuperheroes().size());
+    service.saveAll(form.getSuperheroes());
+    model.addAttribute("result", service.getAll2());
+    //return "redirect:/books/all";
+    return "redirect:/superhero/all2";
   }
 
   // Thymeleaf template is used to display error message

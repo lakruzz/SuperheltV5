@@ -57,9 +57,12 @@ public class SuperheroRepository implements ISuperheroRepository {
     try {
       // All information and work related to database connection is in ConnectionManager
       Connection conn = ConnectionManager.getConnection();
+      // Test output
       System.out.println("Connection object with singleton: " + conn);
-      PreparedStatement psts = conn.prepareStatement("SELECT * from superhero");
-      ResultSet resultSet = psts.executeQuery();
+
+      String SQL = "SELECT * from superhero";
+      Statement stmt = conn.createStatement();
+      ResultSet resultSet = stmt.executeQuery(SQL);
 
       while (resultSet.next()){
         // table columns retrieved by position
@@ -75,6 +78,37 @@ public class SuperheroRepository implements ISuperheroRepository {
       throw new SuperheroException("Something wrong with query");
     }
     return superheroList;
+  }
+
+  public void save(Superhero hero) throws SuperheroException {
+    try {
+      Connection conn = ConnectionManager.getConnection();
+      String SQL = "INSERT INTO superhero (HERO_NAME, REAL_NAME, CREATION_YEAR) " +
+          "VALUES (?, ?, ?)";
+      PreparedStatement pstmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+      //indsæt name og price i prepared statement
+      pstmt.setString(1, hero.getHeroName());
+      pstmt.setString(2, hero.getRealName());
+      pstmt.setInt(3,hero.getCreationYear());
+
+      //execute query
+      pstmt.executeUpdate();
+      ResultSet rs = pstmt.getGeneratedKeys();
+      if (rs.next()) {
+        hero.setHeroId(rs.getInt(1));
+        System.out.println("Test new PK " + hero.getHeroId());
+      }
+
+    } catch (SQLException e) {
+      throw new SuperheroException(e.getMessage());
+    }
+  }
+
+  @Override
+  public void saveall(List<Superhero> superheroes) throws SuperheroException {
+    for (Superhero hero: superheroes) {
+      save(hero);
+    }
   }
 
   /*public Superhero getSuperheroByName(String heroName) {

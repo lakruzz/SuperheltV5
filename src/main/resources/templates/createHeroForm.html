@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create</title>
+</head>
+<body>
+<form action="#" th:action="@{/superhero/save}" th:object="${hero}" method="post">
+  <p>Hero name: <input type="text" th:field="*{heroName}"/></p>
+  <p>Real name: <input type="text" th:field="*{realName}"/></p>
+  <p>Creation year: <input type="text" th:field="*{creationYear}"/></p>
+  <p><input type="submit" value="Save"/> <input type="reset" value="Reset"/></p>
+</form>
+</body>
+</html>

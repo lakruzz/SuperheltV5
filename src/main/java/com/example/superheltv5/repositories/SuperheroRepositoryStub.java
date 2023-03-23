@@ -14,7 +14,7 @@ public class SuperheroRepositoryStub implements ISuperheroRepository {
   private List<Superhero> stubDatabase = new ArrayList<>();
 
   public SuperheroRepositoryStub() {
-    Superhero hero1 = new Superhero(1, "Tarzan", "Lord Greystoke", 1912);
+   Superhero hero1 = new Superhero(1, "Tarzan", "Lord Greystoke", 1912);
     stubDatabase.add(hero1);
     Superhero hero2 = new Superhero(2, "Spider-man", "Peter Parker", 1962);
     stubDatabase.add(hero2);
@@ -28,5 +28,17 @@ public class SuperheroRepositoryStub implements ISuperheroRepository {
   @Override
   public List<Superhero> getAll2() throws SuperheroException {
     return stubDatabase;
+  }
+
+  @Override
+  public void save(Superhero hero) throws SuperheroException {
+    stubDatabase.add(hero);
+  }
+
+  @Override
+  public void saveall(List<Superhero> superheroes) {
+    for (Superhero hero: superheroes) {
+      stubDatabase.add(hero);
+    }
   }
 }

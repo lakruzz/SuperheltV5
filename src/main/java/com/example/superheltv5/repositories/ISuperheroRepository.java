@@ -9,4 +9,8 @@ public interface ISuperheroRepository {
 
   public List<Superhero> getAll();
   public List<Superhero> getAll2() throws SuperheroException;
+
+  public void save(Superhero hero) throws SuperheroException;
+
+  void saveall(List<Superhero> superheroes) throws SuperheroException;
 }

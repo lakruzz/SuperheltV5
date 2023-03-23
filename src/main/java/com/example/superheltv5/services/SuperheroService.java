@@ -25,4 +25,11 @@ public class SuperheroService {
     return repository.getAll2();
   }
 
+  public void save(Superhero hero) throws SuperheroException {
+    repository.save(hero);
+  }
+
+  public void saveAll(List<Superhero> superheroes) throws SuperheroException {
+    repository.saveall(superheroes);
+  }
 }
