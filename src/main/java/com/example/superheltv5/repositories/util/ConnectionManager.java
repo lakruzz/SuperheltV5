@@ -1,7 +1,6 @@
 package com.example.superheltv5.repositories.util;
 
 import com.example.superheltv5.services.SuperheroException;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,35 +10,37 @@ import java.sql.SQLException;
 
 @Component
 public class ConnectionManager {
-
   private static Connection conn;
-  private static String URL_STATIC;
-  private static String USER_STATIC;
-  private static String PASSWORD_STATIC;
+
+  // @Value kan ikke benyttes til at initialisere statiske attributter
+  // benyt setters i stedet
+  private static String URL;
+  private static String USER;
+  private static String PASSWORD;
 
   @Value("${spring.datasource.url}")
-  private String url;
+  public void setUrl(String url) {
+    URL = url;
+  }
 
   @Value("${spring.datasource.username}")
-  private String user;
+  public void setUser(String user) {
+    USER = user;
+  }
 
   @Value("${spring.datasource.password}")
-  private String password;
+  public void setPassword(String password) {
+    PASSWORD = password;
+  }
 
-  @PostConstruct
-  public void init() throws SuperheroException {
-    System.out.println("Initialization of Connection Manager static attributes");
-    URL_STATIC = url;
-    USER_STATIC = user;
-    PASSWORD_STATIC = password;
+  public static Connection getConnection() throws SuperheroException {
     try {
-      conn = DriverManager.getConnection(URL_STATIC, USER_STATIC,PASSWORD_STATIC);
+      if (conn == null) conn = DriverManager.getConnection(URL,USER,PASSWORD);
     } catch (SQLException e) {
+      e.printStackTrace();
       throw new SuperheroException("Could not connect to database");
     }
-  }
-
-  public static Connection getConnection()  {
     return conn;
   }
+
 }

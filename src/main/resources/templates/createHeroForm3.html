@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link th:href="@{/addstyle.css}" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Add Superhero</title>
+</head>
+<body>
+<h1>Add a New Superhero</h1>
+
+<form th:action="@{/super/add}"  method="post" th:object="${superhero}">
+  <p>
+    <label for="heroName">Hero Name:</label>
+    <input type="text" id="heroName" name="hero_Name" th:field="*{hero_Name}" />
+  </p>
+  <p>
+    <label for="realName">Real Name:</label>
+    <input type="text" id="realName" name="real_Name" th:field="*{real_Name}" />
+  </p>
+  <p>
+    <label for="creationYear">Creation Year:</label>
+    <input type="text" id="creationYear" name="creation_year" th:field="*{creation_year}" />
+  </p>
+
+
+  <p>Superpower:</p>
+  <div>
+    <input type="checkbox" id="intelligence" name="superpowers" value="Intelligence" />
+    <label for="intelligence">Intelligence</label>
+  </div>
+  <div>
+    <input type="checkbox" id="stealth" name="superpowers" value="Stealth" />
+    <label for="stealth">Stealth</label>
+  </div>
+  <div>
+    <input type="checkbox" id="super-spider" name="superpowers" value="Super-Spider" />
+    <label for="super-spider">Super-Spider</label>
+  </div>
+  <div>
+    <input type="checkbox" id="strength" name="superpowers" value="Strength" />
+    <label for="strength">Strength</label>
+  </div>
+  <div>
+    <input type="checkbox" id="super-fast" name="superpowers" value="Super-Fast" />
+    <label for="super-fast">Super-Fast</label>
+  </div>
+  <div>
+    <input type="checkbox" id="super-hearing" name="superpowers" value="Super-Hearing" />
+    <label for="super-hearing">Super-Hearing</label>
+  </div>
+
+
+  <p>
+    <label for="cityName">City:</label>
+    <select id="cityName" name="citiesDTO.name" th:field="*{citiesDTO.cityName}" >
+      <option value="Gotham">Gotham</option>
+      <option value="New York">New York</option>
+      <option value="Themyscira">Themyscira</option>
+      <option value="Copenhagen">Copenhagen</option>
+    </select>
+  </p>
+
+  <p>
+    <label for="city_Id">City ID:</label>
+    <input type="hidden" id="city_Id" name="selectedValue" th:field="*{citiesDTO.selectedValue}" />
+  </p>
+
+  <p>
+  <p>
+    <label for="superpower_id">Power ID:</label>
+    <input type="hidden" id="superpower_id" name="selectedValue" th:field="*{superpowerDTO.selectedValue}"/>
+  </p>
+
+  <p>
+    <input type="submit" value="Create Superhero" />
+  </p>
+
+</form>
+
+</body>
+</html>
+
+
