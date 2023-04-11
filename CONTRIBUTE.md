@@ -37,12 +37,12 @@ You can access and run scripts against the database like this:
 cd $(git rev-parse --show-toplevel)
 container=mysql-server
 mycnf=src/mysql/my.dev.cnf
-docker exec -i $container mysql --defaults-file=$mycnf --database= < src/mysql/schema.sql
-docker exec -i $container mysql --defaults-file=$mycnf < src/mysql/data.sql
+docker exec -i $container mysql --defaults-file=$mycnf --database= < src/mysql/init/1-schema.sql
+docker exec -i $container mysql --defaults-file=$mycnf < src/mysql/init/2-data.sql
 docker exec -i $container mysql --defaults-file=$mycnf < src/mysql/test.sql
 ```
 
-Note that the first line that runs the `schema.sql` is a little different; The config files sets a database too, but this isn't defines yet. So `--database=` will unset the name for this run - or else you will get at connection error.
+Note that the first line that runs the `1-schema.sql` is a little different; The config files sets a database too, but this isn't defines yet. So `--database=` will unset the name for this run - or else you will get at connection error.
 
 ### To build the .jar file
 
@@ -140,14 +140,26 @@ src/test/smoketest/smoketest.sh
 
 There is a Dockerfile that builds from `lakruzz/lamj` which has both MySql and Java JDK installed.
 
-The docker file copies over the `*.jar` and the `*.sql` files and starts the database and the spring boot app.
+The docker file copies over the `*.jar` and the `*.sql` files, starts the database, runs the initial scripts and starts spring boot app.
 
 To use this image:
 
 ```shell 
 docker build -t superhero5 .
-docker run -it --rm --name superhero5 --pid=host -p 8080:8080 -p 3306:3306 superhero5
+docker run -it --rm --name superhero5 --pid=host -p 8080:8080 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root superhero5
 ```
+
+- `docker run`: This command is used to run a container from an image.
+- `-it`: This switch allocates a pseudo-TTY and opens an interactive terminal within the container.
+- `--rm`: This switch removes the container automatically after it exits. (useful for development, but it resets the database every time)
+- `--name superhero5`: This sets the name of the container to "superhero5".
+- `--pid=host`: This runs the container in the host's PID namespace. (enable this if you  want to debug the container with a debugger or if you want to be able to stop the container with CTRL-C)
+- `-p 8080:8080`: This maps port 8080 from the container to port 8080 on the host.
+- `-p 3306:3306`: This maps port 3306 from the container to port 3306 on the host.
+- `-e MYSQL_ROOT_PASSWORD=root`: This environment variable sets the root password for MySQL 'root' is default.
+- `superhero5`: This specifies the name of the image to run.
+
+
 
 Note that `--rm` switch removes the container immediately after it's stopped. This is useful for development, but if you want the container remain simple remove this switch.
 

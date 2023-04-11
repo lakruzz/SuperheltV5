@@ -1,26 +1,37 @@
 FROM lakruzz/lamj:latest
 
+# Set the default mysql root password
+# ENV MYSQL_ROOT_PASSWORD=root
 
-# RUN mkdir /app
+# Get the jar file from the target folder
+RUN mkdir /app || true
 COPY target/*.jar /app/
 
-RUN mkdir -p /app/sql
-COPY src/mysql/*.sql /app/sql/
+# Get the sql init files from the src/mysql/init folder
+RUN mkdir /docker-entrypoint-initdb.d/ || true
+COPY src/mysql/init/* /docker-entrypoint-initdb.d
 
-CMD service mysql start && \
-    mysql -u root -e "CREATE DATABASE IF NOT EXISTS superhero;" && \
-    mysql -u root -e "SHOW DATABASES;" && \
-    mysql -u root < /app/sql/schema.sql && \ 
-    mysql -u root < /app/sql/data.sql && \
-    mysql -u root -e "SELECT hero_name FROM superhero.superhero" && \ 
-    mysql -u root -e "CREATE USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';" && \
-    mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';" && \
-    mysql -u root -e "SELECT host, user FROM mysql.user WHERE user='root';FLUSH PRIVILEGES;" && \ 
-    java -jar /app/*.jar
-
-#   mysql -u root -p root -e "UPDATE mysql.user SET host='%' WHERE user='root';" && \
-#   mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';" && \
+CMD set -eux; \
+    /lamj/lamj.init.sh; \
+#    tail -f /dev/null; # Keep the container running, necessary if you don't start a process
+    java -jar /app/*.jar;
 
 
-# docker build -t superhero5 .
-# docker run -it --rm --name superhero5 --pid=host -p 8080:8080 -p 3306:3306 superhero5
+# Build like this:
+# docker build  -t superhero5 .
+
+# Run like this:
+# docker run -it --rm --name superhero5 --pid=host -p 8080:8080 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root superhero5
+#
+#   - `docker run`: This command is used to run a container from an image.
+#   - `-it`: This switch allocates a pseudo-TTY and opens an interactive terminal within the container.
+#   - `--rm`: This switch removes the container automatically after it exits. (useful for development, but it resets the database every time)
+#   - `--name superhero5`: This sets the name of the container to "superhero5".
+#   - `--pid=host`: This runs the container in the host's PID namespace. (enable this if you  want to debug the container with a debugger or if you want to be able to stop the container with CTRL-C)
+#   - `-p 8080:8080`: This maps port 8080 from the container to port 8080 on the host.
+#   - `-p 3306:3306`: This maps port 3306 from the container to port 3306 on the host.
+#   - `-e MYSQL_ROOT_PASSWORD=root`: This environment variable sets the root password for MySQL 'root' is default.
+#   - `superhero5`: This specifies the name of the image to run.
+
+
+
