@@ -4,17 +4,23 @@ FROM lakruzz/lamj:latest
 # ENV MYSQL_ROOT_PASSWORD=root
 
 # Get the jar file from the target folder
-RUN mkdir /app || true
-COPY target/*.jar /app/
+# RUN mkdir /app || true
+# COPY target/*.jar /app/
+COPY src /src
+COPY pom.xml /pom.xml
+RUN mvn -f /pom.xml clean package
+
 
 # Get the sql init files from the src/mysql/init folder
 RUN mkdir /docker-entrypoint-initdb.d/ || true
-COPY src/mysql/init/* /docker-entrypoint-initdb.d
+COPY src/mysql/init/* /docker-entrypoint-initdb.d/
+
+
+
 
 CMD set -eux; \
-    /lamj/lamj.init.sh; \
-#    tail -f /dev/null; # Keep the container running, necessary if you don't start a process
-    java -jar /app/*.jar;
+    lamj.init.sh; \
+    java -jar /target/*.jar;
 
 
 # Build like this:
