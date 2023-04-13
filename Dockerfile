@@ -1,27 +1,21 @@
 FROM lakruzz/lamj:latest
 
-# Set the default mysql root password
 # ENV MYSQL_ROOT_PASSWORD=root
 
-# Get the jar file from the target folder
-# RUN mkdir /app || true
-# COPY target/*.jar /app/
 COPY src /src
 COPY pom.xml /pom.xml
-RUN mvn -f /pom.xml clean package
+RUN set -ex; \
+     mvn -f /pom.xml clean package; \
+     mv /target/*.jar /app/; \
+     rm -rf /target; \
+     rm -rf /src; \
+     rm -rf /pom.xml;
 
-
-# Get the sql init files from the src/mysql/init folder
-RUN mkdir /docker-entrypoint-initdb.d/ || true
 COPY src/mysql/init/* /docker-entrypoint-initdb.d/
-
-
-
 
 CMD set -eux; \
     lamj.init.sh; \
-    java -jar /target/*.jar;
-
+    java -jar /app/*.jar;
 
 # Build like this:
 # docker build  -t superhero5 .
