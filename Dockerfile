@@ -13,7 +13,7 @@ RUN set -ex; \
 
 COPY src/mysql/init/* /docker-entrypoint-initdb.d/
 
-EXPOSE 8080
+EXPOSE 8080 3306
 
 CMD set -eux; \
     lamj.init.sh; \
