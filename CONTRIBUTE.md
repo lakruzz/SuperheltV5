@@ -165,3 +165,19 @@ Note that `--rm` switch removes the container immediately after it's stopped. Th
 
 
 
+### Building your own self-containeds (plural) in based on community maintained images - running it all in Docker-Compose
+
+There are two seperate Dockerfiles
+
+- `Dockerfile.java`
+- `Dockerfile.mysql`
+
+The are also _self-contained_  but in separate _"standard"_ containers, using pure community maintained images.
+
+They are started together using docker-compose.
+
+You can simply run 
+
+```
+./full-docker.sh
+```
