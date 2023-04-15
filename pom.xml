@@ -52,6 +52,13 @@
                 <spring.config.name>application-prod</spring.config.name>
             </properties>
         </profile>
+        <profile>
+            <id>docker-compose</id>
+            <properties>
+                <spring.profiles.active>docker-compose</spring.profiles.active>
+                <spring.config.name>application-docker-compose</spring.config.name>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
