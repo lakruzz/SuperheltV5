@@ -1,6 +1,11 @@
 version: '3'
 services:
   java-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.java
+    environment:
+      - PROFILE=docker-compose
     image: java-app
     ports:
       - "8080:8080"
@@ -9,6 +14,9 @@ services:
     depends_on:
       - mysql-server
   mysql-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
     image: mysql-server
     environment:
       MYSQL_ROOT_PASSWORD: root

@@ -179,5 +179,12 @@ They are started together using docker-compose.
 You can simply run 
 
 ```
-./full-docker.sh
+docker-compose up
+```
+It will build the images if they don't exist.
+
+If you want to force a rebuild - even if images exists - before starting the containers then run:
+
+```
+docker-compose up --build
 ```

@@ -1,11 +1,12 @@
 FROM eclipse-temurin:17-jdk-jammy
-ENV profile=docker-compose
+ENV PROFILE=${PROFILE:-docker-compose}
+ENV PORT=${PORT:-8080}
 COPY src /src
 COPY pom.xml /pom.xml
 COPY mvnw /mvnw
 COPY .mvn /.mvn
 RUN set -ex; \
-     ./mvnw -f /pom.xml -Dspring.profiles.active=${profile} clean package; \
+     ./mvnw -f /pom.xml -Dspring.profiles.active=${PROFILE} clean package; \
      mkdir /app || true; \
      mv /target/*.jar /app/; \
      rm -rf /target; \
@@ -14,10 +15,10 @@ RUN set -ex; \
      rm -rf /mvnw; \
      rm -rf /.mvn;
 
-EXPOSE 8080
+EXPOSE ${PORT}
 
 CMD set -eux; \
-    java -jar -Dspring.profiles.active=${profile} /app/*.jar;
+    java -jar -Dspring.profiles.active=${PROFILE} /app/*.jar;
 
 
 # Build like this:
