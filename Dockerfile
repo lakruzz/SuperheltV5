@@ -2,6 +2,9 @@ FROM lakruzz/lamj:latest
 
 # ENV MYSQL_ROOT_PASSWORD=root
 
+ENV PORT=8080
+ENV MYSQL_PORT=3306
+
 COPY src /src
 COPY pom.xml /pom.xml
 RUN set -ex; \
@@ -13,7 +16,7 @@ RUN set -ex; \
 
 COPY src/mysql/init/* /docker-entrypoint-initdb.d/
 
-EXPOSE 8080 3306
+EXPOSE $PORT $MYSQL_PORT
 
 CMD set -eux; \
     lamj.init.sh; \
